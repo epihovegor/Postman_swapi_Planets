@@ -1,0 +1,742 @@
+{
+	"info": {
+		"_postman_id": "c9d8fd01-7a52-46f6-a311-ee313daea8d9",
+		"name": "ООО ЯСП",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19239103",
+		"_collection_link": "https://www.postman.com/planetary-satellite-829811/workspace/test/collection/19239103-c9d8fd01-7a52-46f6-a311-ee313daea8d9?action=share&creator=19239103&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Page_1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешное отображение страницы 1\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Проверка наличия count: 60\", function () {\r",
+							"    // Получение тела ответа в формате JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    // Проверка, что \"count\" равно 60\r",
+							"    pm.expect(responseBody.count).to.equal(60);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Проверка наличия previous: null\", function () {\r",
+							"    // Получение тела ответа в формате JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    // Проверка, что \"previous\" равно null\r",
+							"    pm.expect(responseBody.previous).to.be.null;\r",
+							"});\r",
+							"\r",
+							"var key = \"PlanetName1\"\r",
+							"var value = pm.response.json().results[0].name\r",
+							"\r",
+							"pm.collectionVariables.set(key,value);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Schema Page_1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const schema= { \r",
+							" //Put your JSON schema \r",
+							"} \r",
+							" \r",
+							"pm.test(\"Validating.schema\",()=>{ \r",
+							"pm.response.to.have.jsonSchema(schema); \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets/schema/",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets",
+						"schema",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "First planet search page 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос на имя планеты из переменной\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://swapi.dev/api/planets?search={{PlanetName1}}",
+					"protocol": "http",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "{{PlanetName1}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "First planet name page 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Получение ответа сервера\r",
+							"var responseJson = pm.response.json();\r",
+							"\r",
+							"// Проверка отсутствия поля \"count\"\r",
+							"if (\"count\" in responseJson) {\r",
+							"    // Генерация ошибки, если поле \"count\" присутствует\r",
+							"    pm.test(\"Ошибка: Ответ содержит несколько планет\", function () {\r",
+							"        pm.expect.fail();\r",
+							"    });\r",
+							"} else {\r",
+							"    // Тест успешно пройден, если поле \"count\" отсутствует\r",
+							"    pm.test(\"Тест успешно пройден\", function () {\r",
+							"        pm.expect(true).to.be.true;\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://swapi.dev/api/planets?name={{PlanetName1}}",
+					"protocol": "http",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{PlanetName1}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planet name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Получение имени из запроса\r",
+							"var requestName = pm.request.url.query.get(\"name\");\r",
+							"\r",
+							"// Получение ответа сервера\r",
+							"var responseJson = pm.response.json();\r",
+							"\r",
+							"// Получение имени из ответа\r",
+							"var responseName = responseJson.name;\r",
+							"\r",
+							"// Сравнение имени из запроса и имени из ответа\r",
+							"pm.test(\"Проверка соответствия названия планеты в запросе и ответе\", function () {\r",
+							"    pm.expect(requestName).to.equal(responseName);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://swapi.dev/api/planets?search=Tatooine",
+					"protocol": "http",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "Tatooine"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Page_3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешное отображение страницы 3\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Проверка наличия count: 60\", function () {\r",
+							"    // Получение тела ответа в формате JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    // Проверка, что \"count\" равно 60\r",
+							"    pm.expect(responseBody.count).to.equal(60);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets?page=3",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Page_6",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешное отображение страницы 6\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Проверка наличия count: 60\", function () {\r",
+							"    // Получение тела ответа в формате JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    // Проверка, что \"count\" равно 60\r",
+							"    pm.expect(responseBody.count).to.equal(60);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Проверка наличия next: null\", function () {\r",
+							"    // Получение тела ответа в формате JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    // Проверка, что \"next\" равно null\r",
+							"    pm.expect(responseBody.next).to.be.null;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets?page=6",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Page_7",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Страница не найдена\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets?page=7",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "7"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planets_A",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ошибка: id символ буквы\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets/A/",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets",
+						"A",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planets_-1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ошибка: отрицательный id\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets/-1/",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets",
+						"-1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planets_0",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ошибка: id 0\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets/0/",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets",
+						"0",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planets_1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный ответ id 1\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Проверка наличия полей в теле ответа\r",
+							"pm.test(\"Проверка наличия полей\", function () {\r",
+							"    // Получение тела ответа в формате JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"\r",
+							"    // Массив полей для проверки\r",
+							"    var fieldsToCheck = [\r",
+							"        \"name\",\r",
+							"        \"diameter\",\r",
+							"        \"rotation_period\",\r",
+							"        \"orbital_period\",\r",
+							"        \"gravity\",\r",
+							"        \"population\",\r",
+							"        \"climate\",\r",
+							"        \"terrain\",\r",
+							"        \"surface_water\",\r",
+							"        \"residents\",\r",
+							"        \"films\",\r",
+							"        \"url\",\r",
+							"        \"created\",\r",
+							"        \"edited\"\r",
+							"    ];\r",
+							"\r",
+							"    // Проверка наличия каждого поля\r",
+							"    fieldsToCheck.forEach(function (field) {\r",
+							"        pm.expect(responseBody).to.have.property(field);\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets/1/",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planets_30",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный ответ id 30\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Проверка наличия полей в теле ответа\r",
+							"pm.test(\"Проверка наличия полей\", function () {\r",
+							"    // Получение тела ответа в формате JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"\r",
+							"    // Массив полей для проверки\r",
+							"    var fieldsToCheck = [\r",
+							"        \"name\",\r",
+							"        \"diameter\",\r",
+							"        \"rotation_period\",\r",
+							"        \"orbital_period\",\r",
+							"        \"gravity\",\r",
+							"        \"population\",\r",
+							"        \"climate\",\r",
+							"        \"terrain\",\r",
+							"        \"surface_water\",\r",
+							"        \"residents\",\r",
+							"        \"films\",\r",
+							"        \"url\",\r",
+							"        \"created\",\r",
+							"        \"edited\"\r",
+							"    ];\r",
+							"\r",
+							"    // Проверка наличия каждого поля\r",
+							"    fieldsToCheck.forEach(function (field) {\r",
+							"        pm.expect(responseBody).to.have.property(field);\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets/30/",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets",
+						"30",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planets_60",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный ответ id 60\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Проверка наличия полей в теле ответа\r",
+							"pm.test(\"Проверка наличия полей\", function () {\r",
+							"    // Получение тела ответа в формате JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"\r",
+							"    // Массив полей для проверки\r",
+							"    var fieldsToCheck = [\r",
+							"        \"name\",\r",
+							"        \"diameter\",\r",
+							"        \"rotation_period\",\r",
+							"        \"orbital_period\",\r",
+							"        \"gravity\",\r",
+							"        \"population\",\r",
+							"        \"climate\",\r",
+							"        \"terrain\",\r",
+							"        \"surface_water\",\r",
+							"        \"residents\",\r",
+							"        \"films\",\r",
+							"        \"url\",\r",
+							"        \"created\",\r",
+							"        \"edited\"\r",
+							"    ];\r",
+							"\r",
+							"    // Проверка наличия каждого поля\r",
+							"    fieldsToCheck.forEach(function (field) {\r",
+							"        pm.expect(responseBody).to.have.property(field);\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets/60/",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets",
+						"60",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Planets_61",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"id не найден\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://swapi.dev/api/planets/61/",
+					"protocol": "https",
+					"host": [
+						"swapi",
+						"dev"
+					],
+					"path": [
+						"api",
+						"planets",
+						"61",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "PlanetName1",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
